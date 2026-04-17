@@ -13,6 +13,7 @@ var merge         = require('merge-stream');
 // Where our files are located
 var jsFiles   = "src/js/**/*.js";
 var viewFiles = "src/js/**/*.html";
+var cssFiles  = "src/*.css";
 
 var interceptErrors = function(error) {
   var args = Array.prototype.slice.call(arguments);
@@ -46,6 +47,12 @@ gulp.task('html', function() {
       .pipe(gulp.dest('./build/'));
 });
 
+gulp.task('css', function() {
+  return gulp.src("src/*.css")
+      .on('error', interceptErrors)
+      .pipe(gulp.dest('./build/'));
+});
+
 gulp.task('views', function() {
   return gulp.src(viewFiles)
       .pipe(templateCache({
@@ -58,7 +65,7 @@ gulp.task('views', function() {
 
 // This task is used for building production ready
 // minified JS/CSS files into the dist/ folder
-gulp.task('build', ['html', 'browserify'], function() {
+gulp.task('build', ['html', 'browserify', 'css'], function() {
   var html = gulp.src("build/index.html")
                  .pipe(gulp.dest('./dist/'));
 
@@ -66,10 +73,13 @@ gulp.task('build', ['html', 'browserify'], function() {
                .pipe(uglify())
                .pipe(gulp.dest('./dist/'));
 
-  return merge(html,js);
+  var css = gulp.src("build/*.css")
+                .pipe(gulp.dest('./dist/'));
+
+  return merge(html,js,css);
 });
 
-gulp.task('default', ['html', 'browserify'], function() {
+gulp.task('default', ['html', 'browserify', 'css'], function() {
 
   browserSync.init(['./build/**/**.**'], {
     server: "./build",
@@ -83,4 +93,5 @@ gulp.task('default', ['html', 'browserify'], function() {
   gulp.watch("src/index.html", ['html']);
   gulp.watch(viewFiles, ['views']);
   gulp.watch(jsFiles, ['browserify']);
+  gulp.watch(cssFiles, ['css']);
 });
