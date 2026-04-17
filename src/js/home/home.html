@@ -22,7 +22,7 @@
               <a href="" class="nav-link"
                 ng-class="{ active: $ctrl.listConfig.type === 'feed' }"
                 ng-click="$ctrl.changeList({ type: 'feed' })">
-                Your Feed
+                Your Stream
               </a>
             </li>
 
@@ -30,7 +30,7 @@
               <a href="" class="nav-link"
                 ng-class="{ active: $ctrl.listConfig.type === 'all' && !$ctrl.listConfig.filters }"
                 ng-click="$ctrl.changeList({ type: 'all' })">
-                Global Feed
+                Global Stream
               </a>
             </li>
 
@@ -52,7 +52,7 @@
       <div class="col-md-3">
         <div class="sidebar">
 
-          <p>Popular Tags</p>
+          <p>Trending Topics</p>
 
           <div class="tag-list" ng-show="$ctrl.tags">
             <a href="" class="tag-default tag-pill"
@@ -69,6 +69,13 @@
           <div class="post-preview"
             ng-show="$ctrl.tagsLoaded && !$ctrl.tags.length">
             No tags are here... yet.
+          </div>
+
+          <hr />
+          <p>Space Hub (Open Source API)</p>
+          <div ng-repeat="news in $ctrl.spaceNews" style="margin-bottom: 1rem; font-size: 0.85rem;">
+            <a href="{{news.url}}" target="_blank" style="font-weight: 600;">{{news.title}}</a>
+            <div style="color: #94a3b8; font-size: 0.75rem;">{{news.news_site}}</div>
           </div>
 
         </div>
